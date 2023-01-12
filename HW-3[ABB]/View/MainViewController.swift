@@ -140,18 +140,15 @@ override func viewDidLayoutSubviews() {
         searchButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
         searchButton.heightAnchor.constraint(equalToConstant: 48),
         
-
         resultTableView.topAnchor.constraint(equalTo: searchButton.bottomAnchor, constant: 8),
         resultTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
         resultTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         resultTableView.heightAnchor.constraint(equalToConstant: 400),
-        
-        
+                
         activityIndicator.topAnchor.constraint(equalTo: resultTableView.bottomAnchor, constant: 20),
         activityIndicator.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
         activityIndicator.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
-        
-       
+               
         resultLabel.topAnchor.constraint(equalTo: activityIndicator.bottomAnchor, constant: 8),
         resultLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
         resultLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
