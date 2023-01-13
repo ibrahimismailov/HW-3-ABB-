@@ -9,15 +9,15 @@ class MainViewController: UIViewController {
     let activityIndicator = UIActivityIndicatorView(style: .large)
     let resultTableView = UITableView()
     let resultLabel = UILabel()
-    var viewModel = MainViewModel()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         title = "Search Book"
         loadBooks()
+        setupActivityIndicator()
         setupSearchBar()
         setupSearchButton()
-        setupActivityIndicator()
         setupResultTableView()
         setupResultLabel()
         searchBar.translatesAutoresizingMaskIntoConstraints = false
@@ -75,15 +75,15 @@ class MainViewController: UIViewController {
                 let operation = BookSearchOperation(searchTerm: searchTerm, bookText: book.text)
                 operation.completionBlock = {
                     self.searchResults.append(BookSearchResult(name: book.name, occurrences: operation.occurrences))
-                    DispatchQueue.main.asyncAfter(deadline: .now()+1) {
-                        self.updateUI()
+                    if self.queue.operations.filter({!$0.isFinished}).count == 0{
+                        DispatchQueue.main.async {
+                            self.activityIndicator.stopAnimating()
+                            self.updateUI()
+                        }
                     }
-
                 }
                 queue.addOperation(operation)
             }
-            queue.waitUntilAllOperationsAreFinished()
-            activityIndicator.stopAnimating()
         }
 
     private func updateUI() {
@@ -121,9 +121,13 @@ extension MainViewController: UITableViewDataSource {
     //MARK: - Extension MainViewController: UITableViewDelegate
 extension MainViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-       
+        tableView.deselectRow(at: indexPath, animated: true)
+     
     }
-}
+
+    }
+
+
 
 //MARK: - Extension MainViewController Constraints
 extension MainViewController {
@@ -157,3 +161,4 @@ override func viewDidLayoutSubviews() {
     ])
 }
 }
+

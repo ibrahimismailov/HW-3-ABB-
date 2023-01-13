@@ -25,7 +25,6 @@
 		15B6BCF129702E03007D587C /* book10.txt in Resources */ = {isa = PBXBuildFile; fileRef = 15B6BCF029702E03007D587C /* book10.txt */; };
 		15B6BCF429707AAF007D587C /* BookSearchOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B6BCF329707AAF007D587C /* BookSearchOperation.swift */; };
 		15B6BCF729707AEB007D587C /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B6BCF629707AEB007D587C /* Book.swift */; };
-		15B6BCF929707D34007D587C /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15B6BCF829707D34007D587C /* MainViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -49,7 +48,6 @@
 		15B6BCF029702E03007D587C /* book10.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = book10.txt; sourceTree = "<group>"; };
 		15B6BCF329707AAF007D587C /* BookSearchOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookSearchOperation.swift; sourceTree = "<group>"; };
 		15B6BCF629707AEB007D587C /* Book.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Book.swift; sourceTree = "<group>"; };
-		15B6BCF829707D34007D587C /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,7 +104,6 @@
 			children = (
 				15B6BCDB29702B85007D587C /* MainVcViews.swift */,
 				15B6BCC829702A05007D587C /* MainViewController.swift */,
-				15B6BCF829707D34007D587C /* MainViewModel.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -234,7 +231,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				15B6BCF929707D34007D587C /* MainViewModel.swift in Sources */,
 				15B6BCDC29702B85007D587C /* MainVcViews.swift in Sources */,
 				15B6BCF429707AAF007D587C /* BookSearchOperation.swift in Sources */,
 				15B6BCF729707AEB007D587C /* Book.swift in Sources */,
