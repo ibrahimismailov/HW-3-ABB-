@@ -8,6 +8,7 @@
 import Foundation
 
 struct BookSearchResult {
+    let book: Book
     let name: String
     let occurrences: Int
 }

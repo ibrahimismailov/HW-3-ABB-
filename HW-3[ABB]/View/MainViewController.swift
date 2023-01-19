@@ -64,7 +64,7 @@ class MainViewController: UIViewController {
         view.addSubview(resultLabel)
         resultLabel.text = "Search what you want"
     }
-    
+
     @objc private func searchButtonTapped() {
             guard let searchTerm = searchBar.text, !searchTerm.isEmpty else {
                 return
@@ -74,7 +74,7 @@ class MainViewController: UIViewController {
             for book in books {
                 let operation = BookSearchOperation(searchTerm: searchTerm, bookText: book.text)
                 operation.completionBlock = {
-                    self.searchResults.append(BookSearchResult(name: book.name, occurrences: operation.occurrences))
+                    self.searchResults.append(BookSearchResult(book: book, name: book.name, occurrences: operation.occurrences))
                     if self.queue.operations.filter({!$0.isFinished}).count == 0{
                         DispatchQueue.main.async {
                             self.activityIndicator.stopAnimating()
@@ -85,19 +85,23 @@ class MainViewController: UIViewController {
                 queue.addOperation(operation)
             }
         }
+    
 
     private func updateUI() {
-        if searchResults.isEmpty {
-            resultLabel.text = "No Results Found"
-            resultLabel.isHidden = false
-            resultTableView.isHidden = true
-            activityIndicator.startAnimating()
-        } else {
-            resultLabel.isHidden = true
-            resultTableView.isHidden = false
-            resultTableView.reloadData()
+        DispatchQueue.main.async {
+            if self.searchResults.isEmpty {
+                self.resultLabel.text = "No Results Found"
+                self.resultLabel.isHidden = false
+                self.resultTableView.isHidden = true
+                self.activityIndicator.startAnimating()
+            } else {
+                self.resultLabel.isHidden = true
+                self.resultTableView.isHidden = false
+                self.resultTableView.reloadData()
+            }
         }
-    }
+        }
+  
 }
 
     //MARK: - Extension MainViewController: UISearchBarDelegate
@@ -121,9 +125,14 @@ extension MainViewController: UITableViewDataSource {
     //MARK: - Extension MainViewController: UITableViewDelegate
 extension MainViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-     
+        let selectedResult = searchResults[indexPath.row]
+        let detailViewController = DetailViewController()
+        detailViewController.book = selectedResult.book
+        detailViewController.searchTerm = searchBar.text
+        detailViewController.occurrences = selectedResult.occurrences
+        present(detailViewController, animated: true, completion: nil)
     }
+
 
     }
 
