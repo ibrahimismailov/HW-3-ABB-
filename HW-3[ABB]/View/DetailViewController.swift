@@ -17,12 +17,14 @@ class DetailViewController: UIViewController {
         let textView = UITextView()
         textView.isEditable = false
         textView.isSelectable = true
+        textView.translatesAutoresizingMaskIntoConstraints = false
         return textView
     }()
     
     let myLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
    
@@ -32,12 +34,9 @@ class DetailViewController: UIViewController {
         title = book?.name
         view.addSubview(textView)
         view.addSubview(myLabel)
-        textView.translatesAutoresizingMaskIntoConstraints = false
-        myLabel.translatesAutoresizingMaskIntoConstraints = false
         makeTextViewText()
-  
- 
     }
+    
     private func makeTextViewText() {
         if let book = book, let searchTerm = searchTerm {
         textView.text = book.text

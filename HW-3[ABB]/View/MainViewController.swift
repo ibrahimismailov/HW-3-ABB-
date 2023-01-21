@@ -1,6 +1,7 @@
 import UIKit
 
 class MainViewController: UIViewController {
+    
     let queue = OperationQueue()
     var searchResults = [BookSearchResult]()
     var books: [Book] = []
@@ -11,98 +12,99 @@ class MainViewController: UIViewController {
     let resultLabel = UILabel()
     
     override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = .systemBackground
-        title = "Search Book"
-        loadBooks()
-        setupActivityIndicator()
-        setupSearchBar()
-        setupSearchButton()
-        setupResultTableView()
-        setupResultLabel()
-        searchBar.translatesAutoresizingMaskIntoConstraints = false
-        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
-        resultTableView.translatesAutoresizingMaskIntoConstraints = false
-        resultLabel.translatesAutoresizingMaskIntoConstraints = false
-    }
+    super.viewDidLoad()
+    view.backgroundColor = .systemBackground
+    title = "Search Book"
+    translatesAutoresizingMaskIntoConstraints()
+    loadBooks()
+    setupActivityIndicator()
+    setupSearchBar()
+    setupSearchButton()
+    setupResultTableView()
+    setupResultLabel()
+}
     
+    private func translatesAutoresizingMaskIntoConstraints() {
+    searchBar.translatesAutoresizingMaskIntoConstraints = false
+    activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+    resultTableView.translatesAutoresizingMaskIntoConstraints = false
+    resultLabel.translatesAutoresizingMaskIntoConstraints = false
+}
     private func loadBooks() {
     
-        for i in 1...10 {
-            let bookPath = Bundle.main.path(forResource: "book\(i)", ofType: "txt")!
-            if let bookText = try? String(contentsOfFile: bookPath, encoding: .utf8) {
-                let book = Book(id: i, name: "Book \(i)", text: bookText)
-                self.books.append(book)
-            }
-        }
+    for i in 1...10 {
+    let bookPath = Bundle.main.path(forResource: "book\(i)", ofType: "txt")!
+    if let bookText = try? String(contentsOfFile: bookPath, encoding: .utf8) {
+    let book = Book(id: i, name: "Book \(i)", text: bookText)
+    self.books.append(book)
     }
+  }
+}
     
     private func setupSearchBar() {
-        searchBar.delegate = self
-        view.addSubview(searchBar)
+    searchBar.delegate = self
+    view.addSubview(searchBar)
     }
     
     private func setupSearchButton() {
-        searchButton.addTarget(self, action: #selector(searchButtonTapped), for: .touchUpInside)
-        view.addSubview(searchButton)
+    searchButton.addTarget(self, action: #selector(searchButtonTapped), for: .touchUpInside)
+    view.addSubview(searchButton)
     }
     
     private func setupActivityIndicator() {
-        view.addSubview(activityIndicator)
-        activityIndicator.color = .blue
+    view.addSubview(activityIndicator)
+    activityIndicator.color = .blue
     }
     
     private func setupResultTableView() {
-        resultTableView.dataSource = self
-        resultTableView.delegate = self
-        view.addSubview(resultTableView)
-        resultTableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+    resultTableView.dataSource = self
+    resultTableView.delegate = self
+    view.addSubview(resultTableView)
+    resultTableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
     }
     
     private func setupResultLabel() {
-        resultLabel.textAlignment = .center
-        view.addSubview(resultLabel)
-        resultLabel.text = "Search what you want"
+    resultLabel.textAlignment = .center
+    view.addSubview(resultLabel)
+    resultLabel.text = "Search what you want"
     }
 
     @objc private func searchButtonTapped() {
-            guard let searchTerm = searchBar.text, !searchTerm.isEmpty else {
-                return
+    guard let searchTerm = searchBar.text, !searchTerm.isEmpty else {
+        return
+    }
+    searchResults.removeAll()
+    activityIndicator.startAnimating()
+    for book in books {
+    let operation = BookSearchOperation(searchTerm: searchTerm, bookText: book.text)
+    operation.completionBlock = {
+    self.searchResults.append(BookSearchResult(book: book, name: book.name, occurrences: operation.occurrences))
+    if self.queue.operations.filter({!$0.isFinished}).count == 0{
+    DispatchQueue.main.async {
+    self.activityIndicator.stopAnimating()
+    self.updateUI()
             }
-            searchResults.removeAll()
-            activityIndicator.startAnimating()
-            for book in books {
-                let operation = BookSearchOperation(searchTerm: searchTerm, bookText: book.text)
-                operation.completionBlock = {
-                    self.searchResults.append(BookSearchResult(book: book, name: book.name, occurrences: operation.occurrences))
-                    if self.queue.operations.filter({!$0.isFinished}).count == 0{
-                        DispatchQueue.main.async {
-                            self.activityIndicator.stopAnimating()
-                            self.updateUI()
-                        }
-                    }
-                }
-                queue.addOperation(operation)
+        }
+    }
+    queue.addOperation(operation)
             }
         }
     
-
     private func updateUI() {
-        DispatchQueue.main.async {
-            if self.searchResults.isEmpty {
-                self.resultLabel.text = "No Results Found"
-                self.resultLabel.isHidden = false
-                self.resultTableView.isHidden = true
-                self.activityIndicator.startAnimating()
-            } else {
-                self.resultLabel.isHidden = true
-                self.resultTableView.isHidden = false
-                self.resultTableView.reloadData()
-            }
+    DispatchQueue.main.async {
+     if self.searchResults.isEmpty {
+        self.resultLabel.text = "No Results Found"
+        self.resultLabel.isHidden = false
+        self.resultTableView.isHidden = true
+        self.activityIndicator.startAnimating()
+    } else {
+        self.resultLabel.isHidden = true
+        self.resultTableView.isHidden = false
+        self.resultTableView.reloadData()
         }
-        }
-  
-}
+       }
+     }
+  }
 
     //MARK: - Extension MainViewController: UISearchBarDelegate
 extension MainViewController: UISearchBarDelegate {
@@ -133,10 +135,7 @@ extension MainViewController: UITableViewDelegate {
         present(detailViewController, animated: true, completion: nil)
     }
 
-
     }
-
-
 
 //MARK: - Extension MainViewController Constraints
 extension MainViewController {

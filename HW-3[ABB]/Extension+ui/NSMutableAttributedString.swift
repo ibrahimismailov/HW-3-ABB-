@@ -6,7 +6,6 @@
 //
 
 import UIKit
-//MARK: - NSMutableAttributedString
 extension NSMutableAttributedString {
 func highlightOccurrences(of searchTerm: String, with color: UIColor) {
     let range = NSRange(location: 0, length: self.length)
